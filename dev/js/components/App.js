@@ -38,7 +38,7 @@ class App extends React.Component {
         return (
 
             <div class="container">
-                <input type="text" placeholder="Search" onChange={this.handleChange.bind(this)} className="search-btn"/> {this.props.loading
+                <input type="text" placeholder="Enter book id" onChange={this.handleChange.bind(this)} className="search-btn"/> {this.props.loading
                     ? <RefreshIndicator size={50} left={70} top={70} loadingColor="#FF9800" status="loading" style={style.refresh}/>
                     : <BootstrapTable height={'500px'} data={tableData} options={options} hover className='liveview-table'>
                         <TableHeaderColumn filter={{

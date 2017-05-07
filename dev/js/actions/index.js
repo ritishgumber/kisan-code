@@ -4,7 +4,7 @@ export const initApp = () => {
     return ((dispatch) => {
         dispatch({type: 'FETCHING_DATA'});
         axios({
-            url: 'http://fakerestapi.azurewebsites.net/api/Books',
+            url: 'https://fakerestapi.azurewebsites.net/api/Books',
             headers: {
                 'Accept': 'application/json'
             }
@@ -21,7 +21,7 @@ export const getBookById = (id) => {
     return ((dispatch) => {
         dispatch({type: 'FETCHING_DATA'});
         axios({
-            url: 'http://fakerestapi.azurewebsites.net/api/Books/' + id,
+            url: 'https://fakerestapi.azurewebsites.net/api/Books/' + id,
             headers: {
                 'Accept': 'application/json'
             }
