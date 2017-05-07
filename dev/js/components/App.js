@@ -1,160 +1,56 @@
 import React from 'react';
-import SideBar from '../containers/sidebar';
-import MainBody from '../containers/mainbody';
-import {initApp} from '../actions/index';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
+import {initApp, getBookById} from '../actions/index';
 import {browserHistory, Link} from 'react-router';
-import {Navbar, Nav, NavItem, NavDropdown, Dropdown} from 'react-bootstrap';
-import {DropDownMenu, MenuItem, Divider} from 'material-ui';
 import _ from 'underscore'
-import DownArrow from 'material-ui/svg-icons/hardware/keyboard-arrow-down';
+import {BootstrapTable, TableHeaderColumn} from 'react-bootstrap-table';
+import RefreshIndicator from 'material-ui/RefreshIndicator';
 
-const styles = {
-    customWidth: {
-        width: 200
+const style = {
+    refresh: {
+        display: 'inline-block',
+        position: 'relative'
     }
 };
-
 class App extends React.Component {
     constructor(props)
     {
         super(props);
-        this.props.initApp('' + window.location.pathname.split('/')[1]);
-        this.state = {
-            scroll: {},
-            value: 1
-        };
-
+        this.state = {};
+        this.props.initApp();
     }
-
-    navigate(route, opts) {
-        if (opts) {
-            browserHistory.push(route);
-            this.props.initApp('' + window.location.pathname.split('/')[1]);
-        } else {
-            window.open(route, '_blank');
-        }
+    descFormatter(cell, row) {
+        return cell.substring(0, 50) + '...';
     }
-
-    setImgFallbackUrl(e) {
-        e.target.onError = null;
-        e.target.src = '/assets/default-app-icon.png';
+    excerpFormatter(cell, row) {
+        return cell.substring(0, 100) + '...'
     }
-    handleChange = (event, index, value) => this.setState({value});
+    handleChange(e) {
+        this.props.getBookById(e.target.value)
+    }
 
     render() {
-        let allApps = '';
-        const thisObj = this;
-
-        if (this.props.allApps) {
-            allApps = this.props.allApps.map((app, i) => {
-                let label = (
-                    <div>
-                        <img height="20px" class="app-selector-img" src={SERVER_URL + '/appfile/' + app.id + '/icon'} onError={this.setImgFallbackUrl.bind(this)}></img>
-                        {app.name}</div>
-                );
-                return (
-                    <MenuItem className={app.id == thisObj.props.appId
-                        ? 'selected-app app-list-item'
-                        : 'app-list-item'} innerDivStyle={{
-                        "display": "inline-flex",
-                        "alignItems": "center"
-                    }} value={i} primaryText={app.name} key={i} onClick={this.navigate.bind(this, '/' + app.id, true)} label={label}>
-                        <img height="20px" class="app-selector-img" src={SERVER_URL + '/appfile/' + app.id + '/icon'} onError={this.setImgFallbackUrl.bind(this)}></img>
-                    </MenuItem>
-                );
-            })
+        const options = {
+            noDataText: 'No Books Found!!'
         }
-        let profilePic = <i class="ion ion-person profile-icon"></i>
-        if (this.props.userProfilePic) {
-            profilePic = <img src={this.props.userProfilePic} class="profilePic"></img>
-        }
-        const myAppsTitle = (
-            <span >
-                <i class="ion ion-android-cloud"></i>&nbsp; {this.props.appName
-}
-            </span>
-        );
-        let value = 0
-        if (this.props.allApps) {
-            value = _.pluck(this.props.allApps, 'id').indexOf(this.props.appId);
-        }
+        const tableData = this.props.data
         return (
 
             <div class="container">
-                <Navbar class="navbar-style navbar-border " collapseOnSelect fixedTop={true}>
-                    <Navbar.Header>
-                        <Navbar.Brand >
-                            <a class="navbar-brand logo" href={DASHBOARD_URL}><img id="logo" src="/assets/cblogo.png" width="40px"/></a>
-                        </Navbar.Brand>
-                        <Navbar.Toggle/>
-                    </Navbar.Header>
-                    <Navbar.Collapse>
-                        <Nav>
-                            <DropDownMenu value={value} onChange={this.handleChange} underlineStyle={{
-                                display: "none"
-                            }} listStyle={{
-                                'padding-top': '0px',
-                                'padding-botton': '0px'
-                            }} iconButton={< DownArrow style = {{color:'red'}}/>}>
-                                {allApps}
-
-                                <MenuItem innerDivStyle={{
-                                    "display": "inline-flex",
-                                    "alignItems": "center"
-                                }} primaryText={'Dashboard'} key={9999} onClick={this.navigate.bind(this, DASHBOARD_URL, false)}>
-                                    <img height="20px" class="app-selector-img" src={'/assets/dashboard-icon.png'}></img>
-                                </MenuItem>
-                            </DropDownMenu>
-                        </Nav>
-                        <Nav pullRight>
-                            <NavItem href={DASHBOARD_URL} class='dashboard-menuitem' onClick={this.navigate.bind(this, DASHBOARD_URL, false)}>
-                                <i class="ion ion-android-apps dashboard-icon"></i>
-                                &nbsp; Dashboard
-                            </NavItem>
-                            <NavDropdown eventKey={3} title={profilePic} id="basic-nav-dropdown" class="profile">
-
-                                <MenuItem key={1} href={DASHBOARD_URL + '/#/profile'}>
-                                    Profile
-                                </MenuItem>
-
-                            </NavDropdown>
-
-                        </Nav>
-                    </Navbar.Collapse>
-                </Navbar>
-                <div class="container">
-                    <h3>&nbsp;</h3>
-                    <div className="row">
-                        <div className=" col-md-2 hidden-xs hidden-sm">
-                            <SideBar location={this.props.location}/>
-                        </div>
-                        <div className="col-sm-10 col-xs-10 col-md-10 container-fluid">
-                            {this.props.children}
-                        </div>
-
-                    </div>
-                </div>
-
-                <Navbar class="navbar-style navbar-border " collapseOnSelect fixedBottom={true}>
-                    <Navbar.Brand>
-                        <a class="footer-item" href="https://cloudboost.io">&copy; {(new Date()).getFullYear()}&nbsp; CloudBoost</a>
-                    </Navbar.Brand>
-                    <Navbar.Toggle/>
-
-                    <Navbar.Collapse>
-                        <Nav >
-                            <NavItem eventKey={2} class="footer-item" href='https://cloudboost.io/terms' onClick={this.navigate.bind(this, 'https://cloudboost.io/terms', false)}>Terms</NavItem>
-                            <NavItem eventKey={3} class="footer-item" onClick={this.navigate.bind(this, 'https://cloudboost.io/privacy', false)} href='https://cloudboost.io/privacy'>Privacy</NavItem>
-                            <NavItem eventKey={4} class="footer-item" onClick={this.navigate.bind(this, 'https://slack.cloudboost.io/', false)} href='https://slack.cloudboost.io/'>Help</NavItem>
-                        </Nav>
-                        <Nav pullRight>
-                            <NavItem eventKey={6} class="footer-item" onClick={this.navigate.bind(this, 'https://tutorials.cloudboost.io/en/datastorage/files#', false)} href='https://tutorials.cloudboost.io/en/datastorage/files#'>Documentation</NavItem>
-                        </Nav>
-
-                    </Navbar.Collapse>
-                </Navbar>
+                <input type="text" placeholder="Search" onChange={this.handleChange.bind(this)} className="search-btn"/> {this.props.loading
+                    ? <RefreshIndicator size={50} left={70} top={70} loadingColor="#FF9800" status="loading" style={style.refresh}/>
+                    : <BootstrapTable height={'500px'} data={tableData} options={options} hover className='liveview-table'>
+                        <TableHeaderColumn filter={{
+                            type: 'TextFilter',
+                            delay: 0
+                        }} dataField='Title' dataSort={true} columnClassName="liveview-table-data">Title</TableHeaderColumn>
+                        <TableHeaderColumn dataSort={true} dataField='Description' dataFormat={this.descFormatter} columnClassName="liveview-table-data">Description</TableHeaderColumn>
+                        <TableHeaderColumn dataField='PageCount' dataSort={true} columnClassName="liveview-table-data">PageCount</TableHeaderColumn>
+                        <TableHeaderColumn dataField='Excerpt' dataSort={true} dataFormat={this.excerpFormatter} columnClassName="liveview-table-data">Excerpt</TableHeaderColumn>
+                        <TableHeaderColumn dataField='PublishDate' dataSort={true} columnClassName="liveview-table-data">PublishDate</TableHeaderColumn>
+                        <TableHeaderColumn dataField='ID' dataSort={true} isKey={true} columnClassName="liveview-table-data">Distinct Id</TableHeaderColumn>
+                    </BootstrapTable>}
 
             </div>
         )
@@ -162,18 +58,12 @@ class App extends React.Component {
 }
 
 function mapStateToProps(state) {
-    return {
-        fetching: state.documents.fetching,
-        fileAddSuccess: state.documents.fileAddSuccess,
-        allApps: state.documents.allApps,
-        appName: state.documents.appName,
-        appId: state.documents.appId,
-        userProfilePic: state.documents.userProfilePic
-    };
+    return {data: state.data.data, loading: state.data.loading};
 }
 function matchDispatchToProps(dispatch) {
     return bindActionCreators({
-        initApp: initApp
+        initApp,
+        getBookById
     }, dispatch);
 }
 export default connect(mapStateToProps, matchDispatchToProps)(App);

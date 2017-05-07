@@ -15,10 +15,17 @@ module.exports = {
                 test: /\.scss/,
                 loader: 'style-loader!css-loader!sass-loader'
             }, {
-                test: /\.css/,
-                loader: 'style-loader!css-loader!sass-loader'
-            }, {
                 test: /\.jsx?$/,
+                exclude: /(node_modules|bower_components)/,
+                loader: 'babel-loader',
+                query: {
+                    presets: [
+                        'react', 'es2015', 'stage-0'
+                    ],
+                    plugins: ['react-html-attrs', 'transform-decorators-legacy', 'transform-class-properties']
+                }
+            }, {
+                test: /\.js?$/,
                 exclude: /(node_modules|bower_components)/,
                 loader: 'babel-loader',
                 query: {
@@ -37,11 +44,5 @@ module.exports = {
     plugins: [],
     node: {
         fs: "empty"
-    },
-    resolve: {
-        alias: {
-            react: path.resolve('./node_modules/react'),
-            'material-ui': path.resolve('./node_modules/material-ui')
-        }
     }
 };

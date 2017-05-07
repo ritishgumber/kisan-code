@@ -1,7 +1,6 @@
 import {combineReducers} from 'redux';
-import DocumentReducer from './reducer-docs';
-import UploadingDocs from './reducer-uploading-docs'
+import DataReducer from './reducer-docs';
 
-const allReducers = combineReducers({documents: DocumentReducer, uploadingFiles: UploadingDocs});
+const allReducers = combineReducers({data: DataReducer});
 
 export default allReducers

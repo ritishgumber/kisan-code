@@ -10,8 +10,6 @@ import promise from 'redux-promise';
 import createLogger from 'redux-logger';
 import allReducers from './reducers';
 import App from './components/App';
-import MainBody from './containers/mainbody';
-import DocumentList from './containers/documentList';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
@@ -37,9 +35,7 @@ window.onload = () => {
         <MuiThemeProvider muiTheme={muiTheme}>
         <Provider store={store}>
             <Router history={browserHistory}>
-                <Route path="/" component={App}>
-                    <Route path="*" component={MainBody}></Route>
-                </Route>
+                <Route path="/" component={App}></Route>
             </Router>
         </Provider>
     </MuiThemeProvider>, document.getElementById('root'));
