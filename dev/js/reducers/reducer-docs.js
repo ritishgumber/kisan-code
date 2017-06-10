@@ -17,6 +17,24 @@ export default function(state = {
                 ...state,
                 loading: false
             }
+        case 'SENDING_MESSAGE':
+            return {
+                ...state,
+                sending: true
+            }
+        case 'MESSAGE_SENT':
+            return {
+                ...state,
+                sending: false,
+                sent: true
+            }
+        case 'SENDING_MESSAGE_ERROR':
+            return {
+                ...state,
+                sending: false,
+                sent: false,
+                error: true
+            }
     }
     return state;
 }

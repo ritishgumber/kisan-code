@@ -10,6 +10,9 @@ import promise from 'redux-promise';
 import createLogger from 'redux-logger';
 import allReducers from './reducers';
 import App from './components/App';
+import ContactsInfo from './components/contactsInfo';
+import SendMessage from './components/sendMessage';
+import List from './components/list';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
@@ -36,6 +39,10 @@ window.onload = () => {
         <Provider store={store}>
             <Router history={browserHistory}>
                 <Route path="/" component={App}></Route>
+                <Route path="/contactsInfo" component={ContactsInfo}></Route>
+                <Route path="/sendMessage" component={SendMessage}></Route>
+                <Route path="/list" component={List}></Route>
+
             </Router>
         </Provider>
     </MuiThemeProvider>, document.getElementById('root'));

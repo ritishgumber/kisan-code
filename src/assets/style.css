@@ -648,6 +648,14 @@ CreateFunnel Styling
 input::-webkit-calendar-picker-indicator {
     display: none;
 }
+.dropBody {}
+.activeDropBody {}
+.contactsInfo {
+    border: 1px solid black
+}
+.react-bs-table-bordered {
+    border: none!important
+}
 
 /*
 CreateFunnel Styling ends
