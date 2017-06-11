@@ -22,6 +22,9 @@ class App extends React.Component {
         //fetch list of all messages
         this.props.fetchList();
     }
+    formatter(cell) {
+        return new Date(cell);
+    }
 
     render() {
         const options = {
@@ -36,7 +39,7 @@ class App extends React.Component {
                     : <BootstrapTable height={'500px'} width={'500px'} data={tableData} options={options} hover className='liveview-table'>
                         <TableHeaderColumn isKey dataSort={true} dataField='name' columnClassName="liveview-table-data">Name</TableHeaderColumn>
                         <TableHeaderColumn dataSort={true} dataField='phone' columnClassName="liveview-table-data">Phone</TableHeaderColumn>
-                        <TableHeaderColumn dataSort={true} dataField='createdAt' columnClassName="liveview-table-data">Time</TableHeaderColumn>
+                        <TableHeaderColumn dataSort={true} dataField='createdAt' columnClassName="liveview-table-data" dataFormat={this.formatter.bind(this)}>Time</TableHeaderColumn>
                         <TableHeaderColumn dataSort={true} dataField='otp' columnClassName="liveview-table-data">OTP</TableHeaderColumn>
                         <TableHeaderColumn dataSort={true} dataField='text' columnClassName="liveview-table-data">Text</TableHeaderColumn>
                     </BootstrapTable>}
