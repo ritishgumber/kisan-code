@@ -49,6 +49,8 @@ export const sendMessage = (phone, text, otp, name) => {
         dispatch({type: 'SENDING_MESSAGE'});
         CB.CloudApp.init('jwnxvlsujgwa', 'c5e0e436-d585-4b23-a06d-6f079860e362');
         //save message sent details
+        if (!text)
+            text = '';
         var obj = new CB.CloudObject('Records');
         obj.set('text', text);
         obj.set('otp', parseInt(otp));
